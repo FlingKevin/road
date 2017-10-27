@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.kevin.road.dao.user.UserInfoMapper" >
+    <resultMap id="BaseResultMap" type="com.kevin.road.entity.UserInfo" >
+        <id column="id" property="id" jdbcType="INTEGER" />
+        <result column="is_deleted" property="isDeleted" jdbcType="CHAR" />
+        <result column="gmt_create" property="gmtCreate" jdbcType="TIMESTAMP" />
+        <result column="creator_id" property="creatorId" jdbcType="INTEGER" />
+        <result column="gmt_modified" property="gmtModified" jdbcType="TIMESTAMP" />
+        <result column="modifier_id" property="modifierId" jdbcType="INTEGER" />
+        <result column="user_name" property="userName" jdbcType="VARCHAR"/>
+        <result column="nick_name" property="nickName" jdbcType="VARCHAR"/>
+        <result column="user_qq" property="userQq" jdbcType="VARCHAR"/>
+        <result column="mobile_phone" property="mobilePhone" jdbcType="VARCHAR"/>
+        <result column="user_gender" property="userGender" jdbcType="VARCHAR"/>
+        <result column="user_birthday" property="userBirthday" jdbcType="VARCHAR"/>
+        <result column="province_id" property="provinceId" jdbcType="INTEGER"/>
+        <result column="city_id" property="cityId" jdbcType="INTEGER"/>
+        <result column="district_id" property="districtId" jdbcType="INTEGER"/>
+        <result column="street_id" property="streetId" jdbcType="INTEGER"/>
+        <result column="address_info" property="addressInfo" jdbcType="VARCHAR"/>
+        <result column="job_title" property="jobTitle" jdbcType="VARCHAR"/>
+        <result column="personal_email" property="personalEmail" jdbcType="VARCHAR"/>
+    </resultMap>
+
+    <sql id="Base_Column_List" >
+        id, is_deleted, gmt_create, creator_id, gmt_modified, modifier_id,
+        user_name,user_name,user_qq,mobile_phone,user_gender,user_birthday,
+        province_id,city_id,district_id,street_id,address_info,job_title,personal_email
+    </sql>
+
+    <select id="selectUserList" resultMap="BaseResultMap">
+        SELECT
+        <include refid="Base_Column_List"/>
+        from rd_user_info
+        where is_deleted='N'
+    </select>
+
+</mapper>

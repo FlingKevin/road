@@ -19,6 +19,12 @@
     </bean>
 
 
+    <!--<bean id="validator"-->
+          <!--class="org.springframework.validation.beanvalidation.LocalValidatorFactoryBean">-->
+        <!--<property name="providerClass" value="org.hibernate.validator.HibernateValidator"/>-->
+        <!--<property name="validationMessageSource" ref="messageSource"/>-->
+    <!--</bean>-->
+
     <mvc:annotation-driven ignore-default-model-on-redirect="true">
         <mvc:message-converters register-defaults="true">
             <!-- 将StringHttpMessageCOnverter的默认编码设为UTF-8,使用@ResponseBody注解时默认为:ISO-8859-1 -->
