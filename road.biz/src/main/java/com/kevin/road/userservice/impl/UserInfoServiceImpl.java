@@ -22,6 +22,11 @@ public class UserInfoServiceImpl implements UserInfoService {
 
 
     @Override
+    public Integer addUser() {
+        return null;
+    }
+
+    @Override
     public List<UserInfo> queryUserList() {
         return userInfoMapper.selectUserList();
     }
