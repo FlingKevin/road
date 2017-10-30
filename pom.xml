@@ -58,6 +58,7 @@
                 <artifactId>road.dal</artifactId>
                 <version>1.0</version>
             </dependency>
+
             <!--Spring的核心工具包-->
             <dependency>
                 <groupId>org.springframework</groupId>
@@ -178,6 +179,7 @@
                 <groupId>commons-collections</groupId>
                 <version>3.2.1</version>
             </dependency>
+            <!--lombok 插件-->
             <dependency>
                 <groupId>org.projectlombok</groupId>
                 <artifactId>lombok</artifactId>

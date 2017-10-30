@@ -25,15 +25,114 @@
 
     <sql id="Base_Column_List" >
         id, is_deleted, gmt_create, creator_id, gmt_modified, modifier_id,
-        user_name,user_name,user_qq,mobile_phone,user_gender,user_birthday,
+        user_name,nick_name,user_qq,mobile_phone,user_gender,user_birthday,
         province_id,city_id,district_id,street_id,address_info,job_title,personal_email
     </sql>
-
+    <!--查询用户列表-->
     <select id="selectUserList" resultMap="BaseResultMap">
         SELECT
         <include refid="Base_Column_List"/>
         from rd_user_info
         where is_deleted='N'
     </select>
+
+    <!--新增用户-->
+    <insert id="insert" parameterType="com.kevin.road.entity.UserInfo" useGeneratedKeys="true" keyProperty="id">
+        insert into rd_user_info
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="creatorId != null">
+                creator_id,
+            </if>
+            <if test="modifierId != null">
+                modifier_id,
+            </if>
+            <if test="userName != null">
+                user_name,
+            </if>
+            <if test="nickName != null">
+                nick_name,
+            </if>
+            <if test="userQq != null">
+                user_qq,
+            </if>
+            <if test="mobilePhone != null">
+                mobile_phone,
+            </if>
+            <if test="userGender != null">
+                user_gender,
+            </if>
+            <if test="userBirthday != null">
+                user_birthday,
+            </if>
+            <if test="provinceId != null">
+                province_id,
+            </if>
+            <if test="cityId != null">
+                city_id,
+            </if>
+            <if test="districtId != null">
+                district_id,
+            </if>
+            <if test="streetId != null">
+                street_id,
+            </if>
+            <if test="addressInfo != null">
+                address_info,
+            </if>
+            <if test="jobTitle != null">
+                job_title,
+            </if>
+            <if test="personalEmail != null">
+                personal_email,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="creatorId != null">
+                #{creatorId,jdbcType=INTEGER},
+            </if>
+            <if test="modifierId != null">
+                #{modifierId,jdbcType=INTEGER},}
+            </if>
+            <if test="userName != null">
+                #{userName,jdbcType=VARCHAR},
+            </if>
+            <if test="nickName != null">
+                #{nickName,jdbcType=VARCHAR},
+            </if>
+            <if test="userQq != null">
+                #{userQq,jdbcType=VARCHAR},
+            </if>
+            <if test="mobilePhone != null">
+                #{mobilePhone,jdbcType=VARCHAR},
+            </if>
+            <if test="userGender != null">
+                #{userGender,jdbcType=VARCHAR},
+            </if>
+            <if test="userBirthday != null">
+                #{userBirthday,jdbcType=TIMESTAMP},
+            </if>
+            <if test="provinceId != null">
+                #{provinceId,jdbcType=INTEGER},
+            </if>
+            <if test="cityId != null">
+                #{cityId,jdbcType=INTEGER},
+            </if>
+            <if test="districtId != null">
+                #{districtId,jdbcType=INTEGER},
+            </if>
+            <if test="streetId != null">
+                #{streetId,jdbcType=INTEGER},
+            </if>
+            <if test="addressInfo != null">
+                #{addressInfo,jdbcType=VARCHAR},
+            </if>
+            <if test="jobTitle != null">
+                #{jobTitle,jdbcType=VARCHAR},
+            </if>
+            <if test="personalEmail != null">
+                #{personalEmail,jdbcType=VARCHAR},
+            </if>
+        </trim>
+    </insert>
 
 </mapper>

@@ -14,4 +14,6 @@ import java.util.List;
 public interface UserInfoMapper {
 
     List<UserInfo> selectUserList();
+
+    int insert(UserInfo userInfo);
 }
