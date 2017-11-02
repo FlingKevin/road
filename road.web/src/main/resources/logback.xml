@@ -1,0 +1,208 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration debug="true"><!--此处debug配置仅仅为是否显示slf4j的内部状态属性(内部执行过程),并不会影响其他配置-->
+    <!--应用名称-->
+    <property name="APP_NAME" value="road"/>
+    <!--日志文件输出位置,首先查找系统属性-Dlog.dir,如果存在就使用其；否则，在当前目录下创建名为logs目录做日志存放的目录-->
+    <property name="LOG_HOME" value="${log.dir:-logs}/${APP_NAME}"/>
+    <!--日志输出格式-->
+    <property name="COMMON_PATTERN"
+              value="[%d{'MM-dd HH:mm:ss,SSS',GMT+8:00}] %-5p [%X{IP}][%X{CU}][%.10t] %logger{36}[%L] - %m%n" />
+    <!--日志编码设置-->
+    <property name="LOG_CHARSET" value="UTF-8" />
+
+    <!--日志输出格式-->
+    <!--<property name="ENCODE_PATTERN" value="%d{yyyy-MM-dd  HH:mm:ss.SSS} [%thread] %-5level %logger{80} - %msg%n"/>-->
+    <contextName>${APP_NAME}</contextName>
+
+    <!--common.log控制台日志：输出全部日志到控制台-->
+    <appender name="CONSOLE" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
+            <Pattern>${COMMON_PATTERN}</Pattern>
+            <charset>${LOG_CHARSET}</charset>
+        </encoder>
+    </appender>
+    <!--common.log文件输出-->
+    <appender name="COMMON" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <file>logs/common.log</file>
+        <append>true</append>
+        <!--每天新的日志文件-->
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <fileNamePattern>logs/common.%d{yyyy-MM-dd}.log</fileNamePattern>
+            <maxHistory>7</maxHistory>
+        </rollingPolicy>
+        <encoder>
+            <charset>${LOG_CHARSET}</charset>
+            <pattern>${COMMON_PATTERN}</pattern>
+        </encoder>
+    </appender>
+    <!--error文件输出-->
+    <appender name="ERROR" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <file>logs/error.log</file>
+        <append>true</append>
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <fileNamePattern>logs/error.%d{yyyy-MM-dd}.log</fileNamePattern>
+            <maxHistory>7</maxHistory>
+        </rollingPolicy>
+        <filter class="ch.qos.logback.classic.filter.ThresholdFilter">
+            <level>ERROR</level>
+        </filter>
+        <encoder>
+            <charset>${LOG_CHARSET}</charset>
+            <pattern>${COMMON_PATTERN}</pattern>
+        </encoder>
+    </appender>
+
+    <!--DBlog文件输出-->
+    <appender name="DB" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <file>logs/db.log</file>
+        <append>true</append>
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <fileNamePattern>logs/db.%d{yyyy-MM-dd}.log</fileNamePattern>
+            <maxHistory>7</maxHistory>
+        </rollingPolicy>
+        <encoder>
+            <charset>${LOG_CHARSET}</charset>
+            <pattern>${COMMON_PATTERN}</pattern>
+        </encoder>
+    </appender>
+    <!--配置db文件来源-->
+    <logger name="com.ibatis" additivity="false">
+        <level value="WARN" />
+        <appender-ref ref="DB" />
+        <appender-ref ref="ERROR" />
+    </logger>
+    <logger name="com.kevin.road.dao" additivity="false">
+        <level value="DEBUG" />
+        <appender-ref ref="DB" />
+        <appender-ref ref="ERROR" />
+    </logger>
+
+    <!--spring 相关日志-->
+    <appender name="SPRING" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <file>logs/spring.log</file>
+        <append>true</append>
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <fileNamePattern>logs/spring.%d{yyyy-MM-dd}.log</fileNamePattern>
+            <maxHistory>7</maxHistory>
+        </rollingPolicy>
+        <encoder>
+            <charset>${LOG_CHARSET}</charset>
+            <pattern>${COMMON_PATTERN}</pattern>
+        </encoder>
+    </appender>
+    <logger name="org.springframework" additivity="false">
+        <level value="DEBUG"/>
+        <appender-ref ref="SPRING"/>
+        <appender-ref ref="ERROR"/>
+    </logger>
+    <logger name="com.mybatis.spring" additivity="false">
+        <level value="INFO"/>
+        <appender-ref ref="SPRING"/>
+        <appender-ref ref="ERROR"/>
+    </logger>
+
+    <logger name="java.sql" additivity="false">
+        <level value="DEBUG"/>
+        <appender-ref ref="DB"/>
+        <appender-ref ref="ERROR"/>
+    </logger>
+
+    <logger name="java.sql.ResultSet" additivity="false">
+        <level value="INFO" />
+        <appender-ref ref="DB" />
+        <appender-ref ref="ERROR" />
+    </logger>
+
+    <!-- log SQL (pre-execution) plus exceptions caused by SQL -->
+    <logger name="jdbc.sqlonly" additivity="false">
+        <level value="DEBUG"/>
+        <appender-ref ref="CONSOLE"/>
+    </logger>
+
+    <!-- log SQL with timing information, post execution -->
+    <logger name="jdbc.sqltiming" additivity="false">
+        <level value="fatal"/>
+        <appender-ref ref="CONSOLE"/>
+    </logger>
+
+    <!-- only use the two logs below to trace ALL JDBC information,
+         NOTE:  This can be very voluminous!  -->
+    <!-- log all jdbc calls except ResultSet calls -->
+    <logger name="jdbc.audit" additivity="false">
+        <level value="fatal"/>
+        <appender-ref ref="CONSOLE"/>
+    </logger>
+
+    <!-- log the jdbc ResultSet calls -->
+    <logger name="jdbc.resultset" additivity="false">
+        <level value="fatal"/>
+        <appender-ref ref="CONSOLE"/>
+    </logger>
+
+    <!-- log connection open/close events and dump of all open connection numbers -->
+    <logger name="jdbc.connection" additivity="false">
+        <level value="debug"/>
+        <appender-ref ref="CONSOLE"/>
+    </logger>
+
+    <!-- this log is for internal debugging of log4jdbc, itself -->
+    <!-- debug logging for log4jdbc itself -->
+    <logger name="log4jdbc.debug" additivity="false">
+        <level value="debug"/>
+        <appender-ref ref="CONSOLE"/>
+    </logger>
+
+
+    <!-- 文件日志：输出全部日志到文件 -->
+    <!--<appender name="FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">-->
+        <!--<rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">-->
+            <!--<fileNamePattern>${LOG_HOME}/output.%d{yyyy-MM-dd}.log</fileNamePattern>-->
+            <!--<maxHistory>7</maxHistory>--><!--保存7天??-->
+        <!--</rollingPolicy>-->
+        <!--<encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">-->
+            <!--<pattern>${COMMON_PATTERN}</pattern>-->
+            <!--<charset>${LOG_CHARSET}</charset>-->
+        <!--</encoder>-->
+    <!--</appender>-->
+
+    <!-- 错误日志：用于将错误日志输出到独立文件 -->
+    <!--<appender name="ERROR_FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">-->
+        <!--<rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">-->
+            <!--<fileNamePattern>${LOG_HOME}/error.%d{yyyy-MM-dd}.log</fileNamePattern>-->
+            <!--<maxHistory>7</maxHistory>-->
+        <!--</rollingPolicy>-->
+        <!--<encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">-->
+            <!--<pattern>${COMMON_PATTERN}</pattern>-->
+            <!--<charset>${LOG_CHARSET}</charset>-->
+        <!--</encoder>-->
+        <!--<filter class="ch.qos.logback.classic.filter.ThresholdFilter">-->
+            <!--<level>WARN</level>-->
+        <!--</filter>-->
+    <!--</appender>-->
+
+    <!-- 独立输出的同步日志 ?? -->
+    <!--<appender name="SYNC_FILE"  class="ch.qos.logback.core.rolling.RollingFileAppender">-->
+        <!--<rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">-->
+            <!--<fileNamePattern>${LOG_HOME}/sync.%d{yyyy-MM-dd}.log</fileNamePattern>-->
+            <!--<maxHistory>7</maxHistory>-->
+        <!--</rollingPolicy>-->
+        <!--<encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">-->
+            <!--<pattern>${ENCODER_PATTERN}</pattern>-->
+        <!--</encoder>-->
+    <!--</appender>-->
+
+    <!--<logger name="log.sync" level="DEBUG" addtivity="true">-->
+        <!--<appender-ref ref="SYNC_FILE" />-->
+    <!--</logger>-->
+
+    <logger name="org.apache">
+        <level value="WARN" />
+    </logger>
+
+    <root>
+        <level value="debug" />
+        <appender-ref ref="COMMON" />
+        <appender-ref ref="CONSOLE" />
+        <appender-ref ref="ERROR" />
+    </root>
+</configuration>
